@@ -3,21 +3,21 @@ from argparse import ArgumentParser
 arg_parser = ArgumentParser()
 
 user_actions = ['add-user',
-           'modify-user',
-           'list-users',
-           'delete-user',
-           'export-users']
+                'modify-user',
+                'list-users',
+                'delete-user',
+                'export-users']
 
 activity_actions = ['add-activity',
-            'list-activities',
-            'modify-activity',
-            'delete-activity',
-            'export-activities']
+                    'list-activities',
+                    'modify-activity',
+                    'delete-activity',
+                    'export-activities']
 
 arg_parser.add_argument("action",
                         nargs=1,
                         help="SportTracker action",
-                        choices=user_actions.extend(ctivity_actions))
+                        choices=user_actions + activity_actions)
 arg_parser.add_argument("parameters",
                         nargs="*",
                         help="Parameter of specified action, e.g. username, repository name etc.")
