@@ -4,12 +4,11 @@ from sport_tracker.common.exceptions import IllegalArgumentException
 class Person:
 
     def __init__(self):
-        self._name = None
-        self._age = 0
-        self._weight = 0
-        self._height = 0
+        self._name = None  # name/name + surname/whatever
+        self._age = 0  # years
+        self._weight = 0  # kgs
+        self._height = 0  # cm
         self._activity_level = 1  # default value 1, range 1 - 5
-
 
     @property
     def name(self):
