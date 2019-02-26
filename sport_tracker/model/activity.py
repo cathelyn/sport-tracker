@@ -1,10 +1,12 @@
 from sport_tracker.common.exceptions import IllegalArgumentException
+from pint import UnitRegistry
 
 
 class Activity:
 
     def __init__(self):
         self._duration = 0  # secs
+        self._calori
 
     @property
     def duration(self):
@@ -25,14 +27,14 @@ class Activity:
                 try:
                     self._duration = 3600 * int(values[0]) + 60 * int(values[1]) + int(values[2])
                 except TypeError:
-                    raise 
+                    raise
             else:
                 raise IllegalArgumentException("Illegal number of arguments.")
         else:
             raise TypeError
 
 
-class MovingActivity(Activity):
+class MovingActivity(Activity):  # otherwise Activity is static
 
     def __init__(self):
         super(MovingActivity, self).__init__()
@@ -40,17 +42,70 @@ class MovingActivity(Activity):
 
     @property
     def distance(self):
-
         return self._distance
 
-
-class StaticActivity(Activity):
-
-    def __init__(self):
-        super(StaticActivity, self).__init__()
+    @distance.setter
+    def distance(self, value):
+        if isinstance(value, int):
+            self._distance = value
+        else:
+            try:
+                ureg = UnitRegistry()
+                self._distance = ureg.parse_expression(value).to(ureg.meter).magnitude
+            except IllegalArgumentException("Not valid distance"):
+                raise
 
 
 class Swimming(MovingActivity):
 
     def __init__(self):
         super(Swimming, self).__init__()
+
+
+class Rowing(MovingActivity):
+
+    def __init__(self):
+        super(Rowing, self).__init__()
+
+
+class Cycling(MovingActivity):
+
+    def __init__(self):
+        super(Cycling, self).__init__()
+
+
+class RopeJumping(Activity):
+
+    def __init__(self):
+        super(RopeJumping, self).__init__()
+
+
+class Running(MovingActivity):
+
+    def __init__(self):
+        super(Running, self).__init__()
+
+
+class Squash(Activity):
+
+    def __init__(self):
+        super(Squash, self).__init__()
+
+
+class Badminton(Activity):
+
+    def __init__(self):
+        super(Badminton, self).__init__()
+
+
+class WeightLigting(Activity):
+
+    def __init__(self):
+        super(WeightLigting, self).__init__()
+
+
+class Yoga(Activity):
+
+    def __init__(self):
+        super(Yoga, self).__init__()
+
