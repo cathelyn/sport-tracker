@@ -6,7 +6,6 @@ class Activity:
 
     def __init__(self):
         self._duration = 0  # secs
-        self._calori
 
     @property
     def duration(self):
@@ -50,11 +49,13 @@ class MovingActivity(Activity):  # otherwise Activity is static
             self._distance = value
         else:
             try:
-                ureg = UnitRegistry()
-                self._distance = ureg.parse_expression(value).to(ureg.meter).magnitude
+                unit_reg = UnitRegistry()
+                self._distance = unit_reg.parse_expression(value).to(unit_reg.meter).magnitude
             except IllegalArgumentException("Not valid distance"):
                 raise
 
+
+# TODO: Implement activity factory
 
 class Swimming(MovingActivity):
 
@@ -98,10 +99,9 @@ class Badminton(Activity):
         super(Badminton, self).__init__()
 
 
-class WeightLigting(Activity):
-
+class WeightLifting(Activity):
     def __init__(self):
-        super(WeightLigting, self).__init__()
+        super(WeightLifting, self).__init__()
 
 
 class Yoga(Activity):

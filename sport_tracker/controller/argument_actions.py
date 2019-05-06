@@ -1,2 +1,3 @@
-def process_args():
-    pass
+def process_args(arguments):
+    del arguments
+    # TODO: Implement

@@ -1,5 +1,5 @@
-from sqlite3 import Connection, connect
 from os.path import dirname
+from sqlite3 import Connection, connect
 
 from sport_tracker.common.exceptions import IllegalArgumentException
 
@@ -11,7 +11,7 @@ class DBController:
         self.statements = {"UPDATE": "TODO",
                            "INSERT": "",
                            "DELETE": "",
-                           "FETCH": ""}
+                           "FETCH": "SELECT ? FROM ? WHERE ?=?"}
 
     def create_connection(self) -> Connection:
         return connect(self.db_file)
