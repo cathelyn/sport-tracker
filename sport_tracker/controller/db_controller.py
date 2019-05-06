@@ -20,4 +20,4 @@ class DBController:
         if statement not in self.statements:
             raise IllegalArgumentException(f"statement argument must be one of the {self.statements.keys()}")
         with self.connection.cursor() as c:
-            c.exeute(self.statements[statement].format(*args))
+            c.exeute(self.statements[statement], *args)
