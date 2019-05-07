@@ -52,4 +52,5 @@ class MovingActivity(Activity):  # otherwise Activity is static
                 unit_reg = UnitRegistry()
                 self._distance = unit_reg.parse_expression(value).to(unit_reg.meter).magnitude
             except IllegalArgumentException("Not valid distance"):
+                # TODO: Verify
                 raise
