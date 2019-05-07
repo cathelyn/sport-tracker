@@ -9,7 +9,7 @@ from sport_tracker.model.person import ActivityLevel
 
 class DBController:
     def __init__(self):
-        self.db_file: str = f"{dirname(sport_tracker.__file__)}/model/database.db"
+        self.db_file: str = f"{dirname(sport_tracker.__file__)}/model/database.db"  # db file is auto-created
         self.connection: Connection = self.create_connection()
         self.statements = {"UPDATE": "TODO",
                            "INSERT_USER": "INSERT INTO users('name', 'born_date', 'weight', 'height', activity_level) "
@@ -17,11 +17,12 @@ class DBController:
                            "INSERT_ACTIVITY": "INSERT INTO activities('sport_id', 'user_id', 'time', 'distance') "
                                               "VALUES (?, ?, ?, ?)",
                            "INSERT_SPORT": "INSERT INTO sports('name', 'moving') VALUES (?, ?)",
-                           "DELETE": "",
+                           "DELETE": "TODO",
                            "FETCH": "SELECT ? FROM ? WHERE ?=?",
                            "FETCH_ALL": "SELECT * FROM ?"}
 
     def create_connection(self) -> Connection:
+        # TODO: error handling
         return connect(self.db_file)
 
     def _execute(self, statement: str, *args):
@@ -40,7 +41,8 @@ class DBController:
     def insert_user(self, *, name: str, date_born: date, weight: float, height: int, activity: ActivityLevel):
         self._execute("INSERT_USER", name, date_born.strftime("%Y-%m-%d"), weight, height, activity.value)
 
+    def insert_activity(self, *, sport_id: int, user_id: int, time: int, distance: int = 0):
+        self._execute("INSERT_ACTIVITY", sport_id, user_id, time, distance)
 
-if __name__ == '__main__':
-    db = DBController()
-    db.insert_user(name="Arthur Dent", date_born=date.today(), weight=75.6, height=178, activity=ActivityLevel.MODERATE)
+    def insert_moving_activity(self, *, sport_id: int, user_id: int, time: int, distance: int):
+        self.insert_activity(sport_id=sport_id, user_id=user_id, time=time, distance=distance)
