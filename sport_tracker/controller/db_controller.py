@@ -1,17 +1,10 @@
 from datetime import date
-from enum import Enum
 from os.path import dirname
 from sqlite3 import Connection, connect, IntegrityError
 
 import sport_tracker
 from sport_tracker.common.exceptions import IllegalArgumentException
-
-
-class ActivityLevel(Enum):
-    SEDENTARY = 1
-    MODERATE = 2
-    VIGOROUS = 3
-    EXTREME = 4
+from sport_tracker.model.person import ActivityLevel
 
 
 class DBController:
