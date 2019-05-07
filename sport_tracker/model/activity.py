@@ -1,11 +1,12 @@
-from sport_tracker.common.exceptions import IllegalArgumentException
 from pint import UnitRegistry
+
+from sport_tracker.common.exceptions import IllegalArgumentException
 
 
 class Activity:
-
-    def __init__(self):
+    def __init__(self, name: str):
         self._duration = 0  # secs
+        self.name = name
 
     @property
     def duration(self):
@@ -34,9 +35,8 @@ class Activity:
 
 
 class MovingActivity(Activity):  # otherwise Activity is static
-
-    def __init__(self):
-        super(MovingActivity, self).__init__()
+    def __init__(self, name: str):
+        super(MovingActivity, self).__init__(name)
         self._distance = 0  # meters
 
     @property
@@ -53,59 +53,3 @@ class MovingActivity(Activity):  # otherwise Activity is static
                 self._distance = unit_reg.parse_expression(value).to(unit_reg.meter).magnitude
             except IllegalArgumentException("Not valid distance"):
                 raise
-
-
-# TODO: Implement activity factory
-
-class Swimming(MovingActivity):
-
-    def __init__(self):
-        super(Swimming, self).__init__()
-
-
-class Rowing(MovingActivity):
-
-    def __init__(self):
-        super(Rowing, self).__init__()
-
-
-class Cycling(MovingActivity):
-
-    def __init__(self):
-        super(Cycling, self).__init__()
-
-
-class RopeJumping(Activity):
-
-    def __init__(self):
-        super(RopeJumping, self).__init__()
-
-
-class Running(MovingActivity):
-
-    def __init__(self):
-        super(Running, self).__init__()
-
-
-class Squash(Activity):
-
-    def __init__(self):
-        super(Squash, self).__init__()
-
-
-class Badminton(Activity):
-
-    def __init__(self):
-        super(Badminton, self).__init__()
-
-
-class WeightLifting(Activity):
-    def __init__(self):
-        super(WeightLifting, self).__init__()
-
-
-class Yoga(Activity):
-
-    def __init__(self):
-        super(Yoga, self).__init__()
-
