@@ -9,7 +9,7 @@ setup(
     author='Katarina Bulkova',
     author_email='bulkova.katarina@gmail.com',
     description='CLI Sport Diary',
-    packages=['sport_tracker', 'sport_tracker.common', 'sport_tracker.controller', ''],
+    packages=['sport_tracker', 'sport_tracker.common', 'sport_tracker.controller'],
     entry_points={
         'console_scripts': [
             'sport_tracker = sport_tracker.__main__:main'
