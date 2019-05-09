@@ -1,8 +1,16 @@
+from enum import Enum
+
 from sport_tracker.common.exceptions import IllegalArgumentException
 
 
-class Person:
+class ActivityLevel(Enum):
+    SEDENTARY = 1
+    MODERATE = 2
+    VIGOROUS = 3
+    EXTREME = 4
 
+
+class Person:
     def __init__(self):
         self._name = None  # name/name + surname/whatever
         self._age = 0  # years

@@ -1,4 +1,5 @@
-from argparser import init_args
+from sport_tracker.argparser import init_args
+from sport_tracker.controller.argument_actions import process_args
 
 
 def main():
