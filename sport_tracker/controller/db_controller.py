@@ -7,6 +7,7 @@ import sport_tracker
 from sport_tracker.common.exceptions import IllegalArgumentException
 from sport_tracker.logger import logger
 from sport_tracker.model.person import ActivityLevel
+from sport_tracker.view.terminal_output import TerminalOutput as ttyo
 
 
 class DBController:
@@ -23,7 +24,8 @@ class DBController:
                            # table names cannot be parametrized, thus separate fetch statements
                            "FETCH_ALL_USERS": "SELECT * FROM users LIMIT ?;",
                            "FETCH_ALL_ACTIVITIES": "SELECT * FROM activities LIMIT ?;",
-                           "FETCH_ALL_SPORTS": "SELECT * FROM sports LIMIT ?;",
+                           "FETCH_ALL_SPORTS": "SELECT id, name, CASE WHEN moving = 1 then 'yes' else 'no' END "
+                                               "FROM sports LIMIT ?;",
                            # table names cannot be parametrized, thus separate fetch row id statements
                            "FETCH_ROW_ID_USERS": "SELECT ROWID FROM users WHERE name=?;",
                            "FETCH_ROW_ID_SPORTS": "SELECT ROWID FROM sports WHERE name=?;",
@@ -65,7 +67,7 @@ class DBController:
         except Error as e:
             logger.error(str(e))
             self.connection.close()
-            exit(1)
+            raise
         else:
             self.connection.commit()
             return c
@@ -149,7 +151,7 @@ class DBController:
         pass
 
     # fetch methods
-    def fetch_row_id(self, *, table: str, column: str, value: Any) -> int:
+    def fetch_row_id(self, *, table: str, column: str = 'name', value: Any) -> int:
         result_cursor: Cursor = self._execute(f"FETCH_ROW_ID_{table.upper()}", value)
         result_list: list = result_cursor.fetchall()
         if not len(result_list):
@@ -166,5 +168,4 @@ class DBController:
 
 if __name__ == '__main__':
     with DBController() as db:
-        print(db.fetch_row_id(table='sports', column="name", value="Squash"))
-        print(db.fetch_all(table='sports'))
+        ttyo.print_table(header=[['ID', 'name', 'moving']], data=db.fetch_all(table='sports'))
