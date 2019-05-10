@@ -1,26 +1,35 @@
 from datetime import date
 from os.path import dirname
-from sqlite3 import Connection, connect, IntegrityError, Error
+from sqlite3 import Connection, connect, IntegrityError, Error, Cursor
+from typing import Any
 
 import sport_tracker
 from sport_tracker.common.exceptions import IllegalArgumentException
 from sport_tracker.logger import logger
 from sport_tracker.model.person import ActivityLevel
+from sport_tracker.view.terminal_output import TerminalOutput as ttyo
 
 
 class DBController:
     def __init__(self):
         self.db_file: str = f"{dirname(sport_tracker.__file__)}/model/database.db"  # db file is auto-created
-        self.connection: Connection = self.create_connection()
+        self.connection: Connection
         self.statements = {"UPDATE": "TODO",
                            "INSERT_USER": "INSERT INTO users('name', 'born_date', 'weight', 'height', activity_level) "
-                                          "VALUES (?, ?, ?, ?, ?)",
+                                          "VALUES (?, ?, ?, ?, ?);",
                            "INSERT_ACTIVITY": "INSERT INTO activities('sport_id', 'user_id', 'time', 'distance') "
-                                              "VALUES (?, ?, ?, ?)",
-                           "INSERT_SPORT": "INSERT INTO sports('name', 'moving') VALUES (?, ?)",
+                                              "VALUES (?, ?, ?, ?);",
+                           "INSERT_SPORT": "INSERT INTO sports('name', 'moving') VALUES (?, ?);",
                            "DELETE": "TODO",
-                           "FETCH": "SELECT ? FROM ? WHERE ?=?",
-                           "FETCH_ALL": "SELECT * FROM ?"}
+                           # table names cannot be parametrized, thus separate fetch statements
+                           "FETCH_ALL_USERS": "SELECT * FROM users LIMIT ?;",
+                           "FETCH_ALL_ACTIVITIES": "SELECT * FROM activities LIMIT ?;",
+                           "FETCH_ALL_SPORTS": "SELECT id, name, CASE WHEN moving = 1 then 'yes' else 'no' END "
+                                               "FROM sports LIMIT ?;",
+                           # table names cannot be parametrized, thus separate fetch row id statements
+                           "FETCH_ROW_ID_USERS": "SELECT ROWID FROM users WHERE name=?;",
+                           "FETCH_ROW_ID_SPORTS": "SELECT ROWID FROM sports WHERE name=?;",
+                           }
 
     def create_connection(self) -> Connection:
         """
@@ -33,12 +42,20 @@ class DBController:
             logger.error(str(e))
             exit(1)
 
-    def _execute(self, statement: str, *args):
+    def __enter__(self):
+        self.connection = self.create_connection()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.connection.close()
+        return exc_val
+
+    def _execute(self, statement: str, *args) -> Cursor:
         """
         Executes statement from :statements: dictionary with given parameters
         :param statement: statement from :statements" dictionary to be executed
         :param args:
-        :return:
+        :return: cursor from the connection
         """
         if statement not in self.statements:
             raise IllegalArgumentException(f"statement argument must be one of the {self.statements.keys()}")
@@ -49,11 +66,11 @@ class DBController:
             raise
         except Error as e:
             logger.error(str(e))
-            exit(1)
+            self.connection.close()
+            raise
         else:
             self.connection.commit()
-        finally:
-            self.connection.close()
+            return c
 
     # public insert methods
     def insert_user(self, *, name: str, date_born: date, weight: float, height: int, activity: ActivityLevel) -> bool:
@@ -120,8 +137,35 @@ class DBController:
         else:
             return True
 
+    # public delete methods
+    def delete_user(self, *, row_id: int):
+        # TODO: Implement
+        pass
+
+    def delete_activity(self, *, row_id: int):
+        # TODO: Implement
+        pass
+
+    def delete_sport(self, *, row_id: int):
+        # TODO: Implement
+        pass
+
+    # fetch methods
+    def fetch_row_id(self, *, table: str, column: str = 'name', value: Any) -> int:
+        result_cursor: Cursor = self._execute(f"FETCH_ROW_ID_{table.upper()}", value)
+        result_list: list = result_cursor.fetchall()
+        if not len(result_list):
+            raise IntegrityError(f"No value for '{value}' in column '{column}' of table '{table}' found!")
+        if len(result_list) == 1:
+            return result_list[0][0]
+        else:
+            raise IntegrityError(f"Multiple values for '{value}' in column '{column}' of table '{table}' found!")
+
+    def fetch_all(self, *, table: str, limit: int = 50) -> list:
+        result_cursor: Cursor = self._execute(f"FETCH_ALL_{table.upper()}", limit)
+        return result_cursor.fetchall()
+
 
 if __name__ == '__main__':
-    db = DBController()
-    db.insert_sport(name="Sprint", moving=True)
-
+    with DBController() as db:
+        ttyo.print_table(header=[['ID', 'name', 'moving']], data=db.fetch_all(table='sports'))

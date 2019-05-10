@@ -20,7 +20,7 @@ arg_parser.add_argument("action",
                         choices=user_actions + activity_actions)
 arg_parser.add_argument("parameters",
                         nargs="*",
-                        help="Parameter of specified action, e.g. username, repository name etc.")
+                        help="Parameters of specified action")
 arg_parser.add_argument("--no_confirm",
                         help="Disable confirmation dialogs",
                         action="store_true",
