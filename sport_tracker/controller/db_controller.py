@@ -1,6 +1,6 @@
 from datetime import date
 from os.path import dirname
-from sqlite3 import Connection, connect, IntegrityError, Error, Cursor
+from sqlite3 import Connection, connect, IntegrityError, Cursor, Error as SQLError
 from typing import Any
 
 import sport_tracker
@@ -15,14 +15,20 @@ class DBController:
         self.db_file: str = f"{dirname(sport_tracker.__file__)}/model/database.db"  # db file is auto-created
         self.connection: Connection
         self.statements = {"UPDATE": "TODO",
-                           "INSERT_USER": "INSERT INTO users('name', 'born_date', 'weight', 'height', activity_level) "
-                                          "VALUES (?, ?, ?, ?, ?);",
+                           "INSERT_USER": "INSERT INTO users('name', 'born_date', 'weight', 'height', gender,"
+                                          " activity_level) "
+                                          "VALUES (?, ?, ?, ?, ?, ?);",
                            "INSERT_ACTIVITY": "INSERT INTO activities('sport_id', 'user_id', 'time', 'distance') "
                                               "VALUES (?, ?, ?, ?);",
                            "INSERT_SPORT": "INSERT INTO sports('name', 'moving') VALUES (?, ?);",
-                           "DELETE": "TODO",
+                           # table names cannot be parametrized, thus separate delete statements
+                           "DELETE_USER": "DELETE FROM users WHERE id=?",
+                           "DELETE_ACTIVITY": "DELETE FROM activities WHERE id=?",
+                           "DELETE_SPORT": "DELETE FROM sports WHERE id=?",
                            # table names cannot be parametrized, thus separate fetch statements
-                           "FETCH_ALL_USERS": "SELECT * FROM users LIMIT ?;",
+                           "FETCH_ALL_USERS": "SELECT id, name, born_date, weight, height, "
+                                              "CASE WHEN gender = 0 then 'male' else 'female' END, activity_level"
+                                              " FROM users LIMIT ?;",
                            "FETCH_ALL_ACTIVITIES": "SELECT * FROM activities LIMIT ?;",
                            "FETCH_ALL_SPORTS": "SELECT id, name, CASE WHEN moving = 1 then 'yes' else 'no' END "
                                                "FROM sports LIMIT ?;",
@@ -38,17 +44,19 @@ class DBController:
         """
         try:
             return connect(self.db_file)
-        except Error as e:
+        except SQLError as e:
             logger.error(str(e))
             exit(1)
 
     def __enter__(self):
         self.connection = self.create_connection()
+        self._populate_db()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.connection.close()
-        return exc_val
+        if exc_val:
+            raise
 
     def _execute(self, statement: str, *args) -> Cursor:
         """
@@ -64,7 +72,7 @@ class DBController:
             c.execute(self.statements[statement], args)
         except IntegrityError:
             raise
-        except Error as e:
+        except SQLError as e:
             logger.error(str(e))
             self.connection.close()
             raise
@@ -72,20 +80,34 @@ class DBController:
             self.connection.commit()
             return c
 
+    # initial population
+    def _populate_db(self):
+        with open(f"{dirname(sport_tracker.__file__)}/common/create_tables.sql") as create_tables_sql:
+            try:
+                tables_creation_statements = create_tables_sql.read()
+                for single_table_creation_statement in tables_creation_statements.split(";"):
+                    self.connection.execute(single_table_creation_statement)
+                self.connection.commit()
+            except (FileNotFoundError, SQLError) as e:
+                logger.error(str(e))
+                raise
+
     # public insert methods
-    def insert_user(self, *, name: str, date_born: date, weight: float, height: int, activity: ActivityLevel) -> bool:
+    def insert_user(self, *, name: str, date_born: date, weight: float, height: int, gender: int,
+                    activity: ActivityLevel) -> bool:
         """
         Method inserts new user into database
         :param name: User's name
         :param date_born: date of birth
         :param weight: weight of the user in kg's
         :param height: height of the user in cm's
+        :param gender: user's gender, 0 for male, 1 for female
         :param activity: level of activity (see Person class file)
         :return: True if operation was successful, False otherwise
         :raise: error different than IntegrityError which is handled
         """
         try:
-            self._execute("INSERT_USER", name, date_born.strftime("%Y-%m-%d"), weight, height, activity.value)
+            self._execute("INSERT_USER", name, date_born.strftime("%Y-%m-%d"), weight, height, gender, activity.value)
         except IntegrityError as e:
             if "name" in str(e):
                 logger.error("User's name already exists in the database")
@@ -166,6 +188,3 @@ class DBController:
         return result_cursor.fetchall()
 
 
-if __name__ == '__main__':
-    with DBController() as db:
-        ttyo.print_table(header=[['ID', 'name', 'moving']], data=db.fetch_all(table='sports'))
