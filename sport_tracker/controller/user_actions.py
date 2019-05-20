@@ -96,6 +96,6 @@ class UserActions:
                            height=height, gender=gender, activity=ActivityLevel(activity_level))
 
     @staticmethod
-    def add_sport(self):
+    def add_sport():
         # TODO: Implement
         pass
