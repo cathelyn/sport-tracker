@@ -1,10 +1,11 @@
 from datetime import date
 from math import floor
 
-from sport_tracker.controller.db_controller import DBController
-from sport_tracker.logger import logger
 from pint import UnitRegistry
 from pint.errors import UndefinedUnitError, DimensionalityError
+
+from sport_tracker.controller.db_controller import DBController
+from sport_tracker.logger import logger
 from sport_tracker.model.person import ActivityLevel
 
 
@@ -93,3 +94,8 @@ class UserActions:
         with DBController() as db:
             db.insert_user(name=user_name, date_born=date_of_birth, weight=weight,
                            height=height, gender=gender, activity=ActivityLevel(activity_level))
+
+    @staticmethod
+    def add_sport(self):
+        # TODO: Implement
+        pass
