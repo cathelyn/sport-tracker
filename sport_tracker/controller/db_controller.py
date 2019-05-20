@@ -7,7 +7,6 @@ import sport_tracker
 from sport_tracker.common.exceptions import IllegalArgumentException
 from sport_tracker.logger import logger
 from sport_tracker.model.person import ActivityLevel
-from sport_tracker.view.terminal_output import TerminalOutput as ttyo
 
 
 class DBController:
