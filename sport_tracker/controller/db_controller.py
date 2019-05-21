@@ -14,8 +14,8 @@ class DBController:
         self.db_file: str = f"{dirname(sport_tracker.__file__)}/model/database.db"  # db file is auto-created
         self.connection: Connection
         self.statements = {"UPDATE": "TODO",
-                           "INSERT_USER": "INSERT INTO users('name', 'born_date', 'weight', 'height', gender,"
-                                          " activity_level) "
+                           "INSERT_USER": "INSERT INTO users('name', 'born_date', 'weight', 'height', 'gender',"
+                                          " 'activity_level') "
                                           "VALUES (?, ?, ?, ?, ?, ?);",
                            "INSERT_ACTIVITY": "INSERT INTO activities('sport_id', 'user_id', 'time', 'distance') "
                                               "VALUES (?, ?, ?, ?);",

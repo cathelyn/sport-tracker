@@ -7,6 +7,7 @@ from pint.errors import UndefinedUnitError, DimensionalityError
 from sport_tracker.controller.db_controller import DBController
 from sport_tracker.logger import logger
 from sport_tracker.model.person import ActivityLevel
+from sport_tracker.view.terminal_output import TerminalOutput
 
 
 class UserActions:
@@ -73,14 +74,14 @@ class UserActions:
             # print information for user to verify
             print("\nVerify these information: ")
             print(f"Name: {user_name}")
-            print(f"Age: {floor((date.today() - date_of_birth).total_seconds() / 365 / 24 / 3600)}")
-            print(f"Weight: {weight}")
-            print(f"Height: {height}")
+            print(f"Age: {floor((date.today() - date_of_birth).total_seconds() / 365 / 24 / 3600)} years")
+            print(f"Weight: {weight * unit_registry.kilogram}")
+            print(f"Height: {height * unit_registry.centimeter}")
             print(f"Gender: {'male' if gender == 0 else 'female'}")
-            print(f"Activity level: {activity_level}")
+            print(f"Activity level: {ActivityLevel(activity_level)}")
 
             while True:
-                choice = input("Is this correct? [y]: ") or "y"
+                choice = input("Is this correct? [Y/n]: ") or "y"
                 if choice.lower().startswith("y"):
                     correct = True
                     break
@@ -91,11 +92,21 @@ class UserActions:
             if correct:
                 break
 
+        # insert obtained pieces of information into database
         with DBController() as db:
             db.insert_user(name=user_name, date_born=date_of_birth, weight=weight,
                            height=height, gender=gender, activity=ActivityLevel(activity_level))
+            logger.info("User added")
+            print(f"User {user_name} added successfully.")
 
     @staticmethod
-    def add_sport():
-        # TODO: Implement
+    def list_users():
+        with DBController() as db:
+            TerminalOutput.print_table(header=['ID', 'Name', 'Birth date', 'Weight', 'Height',
+                                               'Gender', 'Activity Level'],
+                                       data=db.fetch_all(table="users"))
+
+    @staticmethod
+    def modify_user():
+        # TODO: implement
         pass
