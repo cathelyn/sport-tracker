@@ -192,15 +192,15 @@ class DBController:
 
     # update methods
     def update_user(self, *, name: str, date_born: date, weight: float, height: int, gender: int,
-                    activity: ActivityLevel, id_to_change: int) -> bool:
+                    activity: ActivityLevel, id_to_modify: int) -> bool:
         self._execute("UPDATE_USER", name, date_born.strftime("%Y-%m-%d"), weight, height, gender,
-                      activity.value, id_to_change)
+                      activity.value, id_to_modify)
         return True
 
-    def update_sport(self, *, name: str, moving: bool, id_to_change: int) -> bool:
-        self._execute("UPDATE_SPORT", name, 1 if moving else 0, id_to_change)
+    def update_sport(self, *, name: str, moving: bool, id_to_modify: int) -> bool:
+        self._execute("UPDATE_SPORT", name, 1 if moving else 0, id_to_modify)
         return True
 
-    def update_activity(self, *, sport_id: int, user_id: int, time: int, distance: int, id_to_change: int) -> bool:
-        self._execute("UPDATE_ACTIVITY", sport_id, user_id, time, distance, id_to_change)
+    def update_activity(self, *, sport_id: int, user_id: int, time: int, distance: int = 0, id_to_modify: int) -> bool:
+        self._execute("UPDATE_ACTIVITY", sport_id, user_id, time, distance, id_to_modify)
         return True
