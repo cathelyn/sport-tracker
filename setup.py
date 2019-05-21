@@ -5,7 +5,7 @@ with open("requirements.txt") as req_file:
 
 setup(
     name='sport_tracker',
-    version='0.0.1',
+    version='0.0.2',
     author='Katarina Bulkova',
     author_email='bulkova.katarina@gmail.com',
     description='CLI Sport Diary',

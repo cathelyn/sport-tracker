@@ -13,7 +13,11 @@ class DBController:
     def __init__(self):
         self.db_file: str = f"{dirname(sport_tracker.__file__)}/model/database.db"  # db file is auto-created
         self.connection: Connection
-        self.statements = {"UPDATE": "TODO",
+        self.statements = {"UPDATE_USER": "UPDATE users SET 'name'=?, 'born_date'=?, 'weight'=?, 'height'=?, "
+                                          "'gender'=?, 'activity_level'=? WHERE id=?",
+                           "UPDATE_SPORT": "UPDATE sports SET 'name'=?, 'moving'=? WHERE id=?",
+                           "UPDATE_ACTIVITY": "UPDATE activities SET 'sport_id'=?, 'user_id'=?, 'time'=?, "
+                                              "'distance'=? WHERE id=?",
                            "INSERT_USER": "INSERT INTO users('name', 'born_date', 'weight', 'height', 'gender',"
                                           " 'activity_level') "
                                           "VALUES (?, ?, ?, ?, ?, ?);",
@@ -186,4 +190,17 @@ class DBController:
         result_cursor: Cursor = self._execute(f"FETCH_ALL_{table.upper()}", limit)
         return result_cursor.fetchall()
 
+    # update methods
+    def update_user(self, *, name: str, date_born: date, weight: float, height: int, gender: int,
+                    activity: ActivityLevel, id_to_change: int) -> bool:
+        self._execute("UPDATE_USER", name, date_born.strftime("%Y-%m-%d"), weight, height, gender,
+                      activity.value, id_to_change)
+        return True
 
+    def update_sport(self, *, name: str, moving: bool, id_to_change: int) -> bool:
+        self._execute("UPDATE_SPORT", name, 1 if moving else 0, id_to_change)
+        return True
+
+    def update_activity(self, *, sport_id: int, user_id: int, time: int, distance: int, id_to_change: int) -> bool:
+        self._execute("UPDATE_ACTIVITY", sport_id, user_id, time, distance, id_to_change)
+        return True
