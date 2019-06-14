@@ -1,6 +1,6 @@
 from pint import UnitRegistry
 
-from sport_tracker.common.exceptions import IllegalArgumentException
+from sport_tracker.common.exceptions import InvalidArgumentError
 
 
 class Activity:
@@ -29,7 +29,7 @@ class Activity:
                 except TypeError:
                     raise
             else:
-                raise IllegalArgumentException("Illegal number of arguments.")
+                raise InvalidArgumentError("Illegal number of arguments.")
         else:
             raise TypeError
 
@@ -51,6 +51,6 @@ class MovingActivity(Activity):  # otherwise Activity is static
             try:
                 unit_reg = UnitRegistry()
                 self._distance = unit_reg.parse_expression(value).to(unit_reg.meter).magnitude
-            except IllegalArgumentException("Not valid distance"):
+            except InvalidArgumentError("Not valid distance"):
                 # TODO: Verify
                 raise

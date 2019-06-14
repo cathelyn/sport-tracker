@@ -10,6 +10,9 @@ setup(
     author_email='bulkova.katarina@gmail.com',
     description='CLI Sport Diary',
     packages=['sport_tracker', 'sport_tracker.common', 'sport_tracker.controller', 'sport_tracker.view'],
+    platforms=['linux'],
+    python_requires=">=3.7",
+    license="GPL",
     entry_points={
         'console_scripts': [
             'sport_tracker = sport_tracker.__main__:main'
