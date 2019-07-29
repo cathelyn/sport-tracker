@@ -93,7 +93,7 @@ class UserActions:
         while True:
             default_prompt = f" [{default_values['activity_level']}]" if default_values else ''
             activity_level: str = input(f"Enter your activity level "
-                                        f"['1 = sedentary to 4 = professional athlete]{default_prompt}: ")
+                                        f"[1 = sedentary to 4 = professional athlete]{default_prompt}: ")
             try:
                 if not activity_level and default_values:
                     activity_level = default_values['activity_level']
