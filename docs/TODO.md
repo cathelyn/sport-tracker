@@ -1,0 +1,3 @@
+- TCX support (import, export)
+- Flask web interface
+- Bash, Sh, Zsh, ksh autocomplete
