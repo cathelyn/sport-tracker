@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 
 arg_parser = ArgumentParser()
 
-user_actions = ['add-user',
+user_actions = ['create-user',
                 'modify-user',
                 'list-users',
                 'delete-user',
@@ -14,10 +14,15 @@ activity_actions = ['add-activity',
                     'delete-activity',
                     'export-activities']
 
+sport_actions = ['add-sport',
+                 'list-sports',
+                 'modify-sports',
+                 'delete-sport']
+
 arg_parser.add_argument("action",
                         nargs=1,
                         help="SportTracker action",
-                        choices=user_actions + activity_actions)
+                        choices=user_actions + activity_actions + sport_actions)
 arg_parser.add_argument("parameters",
                         nargs="*",
                         help="Parameters of specified action")

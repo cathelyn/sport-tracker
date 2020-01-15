@@ -81,6 +81,7 @@ class UserActions:
             gender: str = input(f"Enter your gender [male/female]{default_prompt}: ")
             if not gender and default_values:
                 gender = default_values['gender']
+                break
             if gender.lower().startswith("m"):
                 gender: int = 0  # male is stored as 0 in db
                 break
@@ -111,7 +112,7 @@ class UserActions:
         return user_name, date_of_birth, weight, height, gender, activity_level
 
     @staticmethod
-    def add_user():
+    def create_user():
         unit_registry = UnitRegistry()
         while True:
             logger.info("Registering new user")
@@ -186,6 +187,10 @@ class UserActions:
         logger.info("Update: success")
         print("User was updated successfully.")
 
+    @staticmethod
+    def delete_user():
+        raise NotImplementedError
 
-if __name__ == '__main__':
-    UserActions.modify_user()
+    @staticmethod
+    def export_users():
+        raise NotImplementedError
