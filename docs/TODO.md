@@ -1,0 +1,5 @@
+- [ ] TCX support (import, export)
+- [ ] Flask web interface
+- [ ] Bash, Sh, Zsh, ksh autocomplete
+- [ ] Custom fields in activities
+- [ ] Fuzzy check for existing sports

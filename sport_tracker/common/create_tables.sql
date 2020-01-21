@@ -21,3 +21,11 @@ CREATE TABLE IF NOT EXISTS activities(
     foreign key(sport_id) references sports(id),
     foreign key(user_id) references users(id)
     );
+CREATE TABLE IF NOT EXISTS sports_extra_columns(
+    id INTEGER PRIMARY KEY ASC,
+    sport_id INTEGER,
+    name varchar(128),
+    value varchar(128),
+    type varchar(128),
+    foreign key(sport_id) references sports(id)
+);

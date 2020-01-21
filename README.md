@@ -10,18 +10,18 @@ Anyone who wants to track their workouts/trainings using CLI.
 ## What does this application do
 (ticked means implemented)
 - User management:
-    - [ ] add user
-    - [ ] list users
+    - [x] add user
+    - [x] list users
     - [ ] delete user
-    - [ ] modify user
+    - [x] modify user
 - Activity management:
     - [ ] add new activity (e.g. cycling 20 km)
     - [ ] list all activities for current user
     - [ ] modify older entry
     - [ ] delete older entry
 - Sports management (i.e. database of possible sports):
-    - [ ] add new sport (either distance based or time based)
-    - [ ] list all available sports
+    - [x] add new sport (either distance based or time based)
+    - [x] list all available sports
     - [ ] modify sport
     - [ ] delete sport
     

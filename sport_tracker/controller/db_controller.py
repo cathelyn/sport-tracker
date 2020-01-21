@@ -4,7 +4,7 @@ from sqlite3 import Connection, connect, IntegrityError, Cursor, Error as SQLErr
 from typing import Any
 
 import sport_tracker
-from sport_tracker.common.exceptions import IllegalArgumentException
+from sport_tracker.common.exceptions import InvalidArgumentError
 from sport_tracker.logger import logger
 from sport_tracker.model.person import ActivityLevel
 
@@ -32,6 +32,9 @@ class DBController:
                            "FETCH_ALL_USERS": "SELECT id, name, born_date, weight, height, "
                                               "CASE WHEN gender = 0 then 'male' else 'female' END, activity_level"
                                               " FROM users LIMIT ?;",
+                           "FETCH_USER_BY_ID": "SELECT name, born_date, weight, height, "
+                                               "CASE WHEN gender = 0 then 'male' else 'female' END, "
+                                               "activity_level FROM users WHERE id=?;",
                            "FETCH_ALL_ACTIVITIES": "SELECT * FROM activities LIMIT ?;",
                            "FETCH_ALL_SPORTS": "SELECT id, name, CASE WHEN moving = 1 then 'yes' else 'no' END "
                                                "FROM sports LIMIT ?;",
@@ -69,7 +72,7 @@ class DBController:
         :return: cursor from the connection
         """
         if statement not in self.statements:
-            raise IllegalArgumentException(f"statement argument must be one of the {self.statements.keys()}")
+            raise InvalidArgumentError(f"statement argument must be one of the {self.statements.keys()}")
         c = self.connection.cursor()
         try:
             c.execute(self.statements[statement], args)
@@ -188,6 +191,10 @@ class DBController:
 
     def fetch_all(self, *, table: str, limit: int = 50) -> list:
         result_cursor: Cursor = self._execute(f"FETCH_ALL_{table.upper()}", limit)
+        return result_cursor.fetchall()
+
+    def fetch_user_by_id(self, *, row_id: int) -> list:
+        result_cursor: Cursor = self._execute("FETCH_USER_BY_ID", row_id)
         return result_cursor.fetchall()
 
     # update methods

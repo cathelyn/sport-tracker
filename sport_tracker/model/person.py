@@ -1,6 +1,6 @@
 from enum import Enum
 
-from sport_tracker.common.exceptions import IllegalArgumentException
+from sport_tracker.common.exceptions import InvalidArgumentError
 
 
 class ActivityLevel(Enum):
@@ -51,7 +51,7 @@ class Person:
             if 0 < value < 150:
                 self._age = value
             else:
-                raise IllegalArgumentException("Your age must fall in interval 1 - 149.")
+                raise InvalidArgumentError("Your age must fall in interval 1 - 149.")
         else:
             raise TypeError("Age must be a number.")
 
@@ -61,7 +61,7 @@ class Person:
             if 0 < value < 250:
                 self._age = value
             else:
-                raise IllegalArgumentException("Your weight must fall in interval 1 - 249.")
+                raise InvalidArgumentError("Your weight must fall in interval 1 - 249.")
         else:
             raise TypeError("Weight must be a number.")
 
@@ -71,7 +71,7 @@ class Person:
             if 70 < value < 250:
                 self._height = value
             else:
-                raise IllegalArgumentException("Your height must fall in interval 71 - 249.")
+                raise InvalidArgumentError("Your height must fall in interval 71 - 249.")
         else:
             raise TypeError("Height must be a number.")
 
@@ -81,6 +81,6 @@ class Person:
             if 1 <= value <= 5:
                 self._activity_level = value
             else:
-                raise IllegalArgumentException("Your activity level must fall in interval 1 - 5.")
+                raise InvalidArgumentError("Your activity level must fall in interval 1 - 5.")
         else:
             raise TypeError("Activity level must be a number.")
