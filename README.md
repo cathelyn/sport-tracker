@@ -1,6 +1,9 @@
 # Sport Tracker
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9eb24f3d39c64e049d5aefbc98dd6f13)](https://app.codacy.com/app/miskopo/sport-tracker?utm_source=github.com&utm_medium=referral&utm_content=cathelyn/sport-tracker&utm_campaign=Badge_Grade_Dashboard)
+[![PyPi version](https://img.shields.io/pypi/v/sport-tracker)](https://pypi.org/project/sport-tracker/)
+![PyPI - License](https://img.shields.io/pypi/l/sport-tracker)
+![Python version](https://img.shields.io/badge/python-3.7-blue)
 
 CLI based Sport Tracker supporting multiple profiles, csv and graphical export.
 
@@ -30,4 +33,4 @@ Anyone who wants to track their workouts/trainings using CLI.
  
  ## Installation
 Early phase, not yet available, for testing, execute `install.sh` script or 
-install manually using `pip3 install --user -e .` in projec t root.
+install manually using `pip3 install --user -e .` in project root.
