@@ -170,7 +170,7 @@ class UserActions:
             except (TypeError, InvalidArgumentError):
                 logger.error("Incorrect choice, try again")
 
-        logger.info("Obtaining all the pieces of information about edited ")
+        logger.info("Obtaining all the pieces of information about edited user")
         with DBController() as db:
             fetched_info: list = db.fetch_user_by_id(row_id=id_to_modify)[0]
             fields: list = ['user_name', 'date_of_birth', 'weight', 'height', 'gender', 'activity_level']
@@ -189,7 +189,33 @@ class UserActions:
 
     @staticmethod
     def delete_user():
-        raise NotImplementedError
+        logger.info("Deleting user")
+        print("Choose what user to delete: ")
+        UserActions.list_users()
+        while True:
+            id_to_delete: str = input("ID of user to delete: ")
+            try:
+                with DBController() as db:
+                    number_of_users: int = len(db.fetch_all(table="users"))
+                id_to_delete: int = int(id_to_delete)
+                if 1 <= id_to_delete <= number_of_users:
+                    break
+                else:
+                    raise InvalidArgumentError(f"User id must be in range 1 - {number_of_users}")
+            except (TypeError, InvalidArgumentError):
+                logger.error("Incorrect choice, try again")
+        while True:
+            with DBController() as db:
+                choice = input(f"Are you sure you want to delete this user - "
+                               f"{db.fetch_user_by_id(row_id=id_to_delete)[0][0]}? ") or "n"
+                if choice.lower().startswith("y"):
+                    correct = True
+                    db.delete_user(row_id=id_to_delete)
+                    break
+                elif choice.lower().startswith("n"):
+                    correct = False
+                    break
+            
 
     @staticmethod
     def export_users():

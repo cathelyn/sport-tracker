@@ -168,15 +168,15 @@ class DBController:
     # public delete methods
     def delete_user(self, *, row_id: int):
         # TODO: Implement
-        pass
+        raise NotImplementedError
 
     def delete_activity(self, *, row_id: int):
         # TODO: Implement
-        pass
+        raise NotImplementedError
 
     def delete_sport(self, *, row_id: int):
         # TODO: Implement
-        pass
+        raise NotImplementedError
 
     # fetch methods
     def fetch_row_id(self, *, table: str, column: str = 'name', value: Any) -> int:
