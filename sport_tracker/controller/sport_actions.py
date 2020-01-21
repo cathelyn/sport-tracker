@@ -69,7 +69,7 @@ class SportAction:
     @staticmethod
     def list_sports():
         with DBController() as db:
-            TerminalOutput.print_table(header=['ID', 'Name', 'Moving?'],
+            TerminalOutput.print_table(header=['ID', 'Name', 'Distance based?'],
                                        data=db.fetch_all(table="sports"))
 
     @staticmethod
