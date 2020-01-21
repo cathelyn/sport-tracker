@@ -1,6 +1,8 @@
 # Sport Tracker
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ca363f6ca1cb41039719ce9c5f947142)](https://www.codacy.com/app/miskopo/sport-tracker?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=cathelyn/sport-tracker&amp;utm_campaign=Badge_Grade)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9eb24f3d39c64e049d5aefbc98dd6f13)](https://app.codacy.com/app/miskopo/sport-tracker?utm_source=github.com&utm_medium=referral&utm_content=cathelyn/sport-tracker&utm_campaign=Badge_Grade_Dashboard)
+
 CLI based Sport Tracker supporting multiple profiles, csv and graphical export.
 
 ## Who is this application for
