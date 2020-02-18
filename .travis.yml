@@ -1,0 +1,21 @@
+language: python
+python:
+- '3.7'
+install:
+- pip install -r requirements.txt
+jobs:
+  include:
+#  - stage: test
+#    script:
+#    - python -m pytest --cov=./sport-tracker --capture=sys -vv
+#    - python -m pytest --cov=./sport-tracker --capture=sys -vv
+  - stage: installation
+    script:
+    - pip install -e .
+  - stage: run
+    script:
+    - python -m sport-tracker -h
+after_success:
+- coverage xml
+- python-codacy-coverage -r coverage.xml
+- python setup.py bdist

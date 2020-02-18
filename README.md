@@ -1,6 +1,7 @@
 # Sport Tracker
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9eb24f3d39c64e049d5aefbc98dd6f13)](https://app.codacy.com/app/miskopo/sport-tracker?utm_source=github.com&utm_medium=referral&utm_content=cathelyn/sport-tracker&utm_campaign=Badge_Grade_Dashboard)
+[![Build Status](https://travis-ci.org/cathelyn/sport-tracker.svg?branch=master)](https://travis-ci.org/cathelyn/sport-tracker)
 [![PyPi version](https://img.shields.io/pypi/v/sport-tracker)](https://pypi.org/project/sport-tracker/)
 ![PyPI - License](https://img.shields.io/pypi/l/sport-tracker)
 ![Python version](https://img.shields.io/badge/python-3.7-blue)
