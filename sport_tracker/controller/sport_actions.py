@@ -1,3 +1,4 @@
+from sport_tracker.common.input_utils import confirm_validity
 from sport_tracker.controller.db_controller import DBController
 from sport_tracker.logger import logger
 from sport_tracker.view.terminal_output import TerminalOutput
@@ -44,16 +45,8 @@ class SportAction:
             print("\nVerify these information: ")
             print(f"Name of the sport: {sport_name}")
             print(f"Sport is distance based (moving): {'yes' if moving == 1 else 'no'}")
-            while True:
-                choice = input("Is this correct? [Y/n]: ") or "y"
-                if choice.lower().startswith("y"):
-                    correct = True
-                    break
-                elif choice.lower().startswith("n"):
-                    correct = False
-                    break
 
-            if correct:
+            if confirm_validity:
                 break
 
                 # insert obtained pieces of information into database

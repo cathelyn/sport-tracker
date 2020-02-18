@@ -3,7 +3,7 @@ from pint import UnitRegistry
 from sport_tracker.common.exceptions import InvalidArgumentError
 
 
-class Activity:
+class Sport:
     def __init__(self, name: str):
         self._duration = 0  # secs
         self.name = name
@@ -34,9 +34,9 @@ class Activity:
             raise TypeError
 
 
-class MovingActivity(Activity):  # otherwise Activity is static
+class MovingSport(Sport):  # otherwise Activity is static
     def __init__(self, name: str):
-        super(MovingActivity, self).__init__(name)
+        super(MovingSport, self).__init__(name)
         self._distance = 0  # meters
 
     @property

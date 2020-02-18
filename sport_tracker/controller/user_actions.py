@@ -5,6 +5,7 @@ from pint import UnitRegistry
 from pint.errors import UndefinedUnitError, DimensionalityError
 
 from sport_tracker.common.exceptions import InvalidArgumentError
+from sport_tracker.common.input_utils import confirm_validity
 from sport_tracker.controller.db_controller import DBController
 from sport_tracker.logger import logger
 from sport_tracker.model.person import ActivityLevel
@@ -126,16 +127,7 @@ class UserActions:
             print(f"Gender: {'male' if gender == 0 else 'female'}")
             print(f"Activity level: {ActivityLevel(activity_level)}")
 
-            while True:
-                choice = input("Is this correct? [Y/n]: ") or "y"
-                if choice.lower().startswith("y"):
-                    correct = True
-                    break
-                elif choice.lower().startswith("n"):
-                    correct = False
-                    break
-
-            if correct:
+            if confirm_validity:
                 break
 
         # insert obtained pieces of information into database
@@ -189,6 +181,7 @@ class UserActions:
 
     @staticmethod
     def delete_user():
+        # TODO: Ask to delete all related information
         logger.info("Deleting user")
         print("Choose what user to delete: ")
         UserActions.list_users()
@@ -206,15 +199,19 @@ class UserActions:
                 logger.error("Incorrect choice, try again")
         while True:
             with DBController() as db:
+                # TODO: Fix condition
                 choice = input(f"Are you sure you want to delete this user - "
                                f"{db.fetch_user_by_id(row_id=id_to_delete)[0][0]}? ") or "n"
                 if choice.lower().startswith("y"):
                     correct = True
                     db.delete_user(row_id=id_to_delete)
+                    logger.info("User deleted")
+                    print("User was deleted from the database")
                     break
                 elif choice.lower().startswith("n"):
                     correct = False
                     break
+
             
 
     @staticmethod
